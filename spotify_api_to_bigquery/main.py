@@ -1,7 +1,6 @@
 import pandas as pd
-
-
-from utils import get_google_credentials, get_spotify_access_token, get_album, get_artist, get_track, get_track_features
+from utils import (get_album, get_artist, get_google_credentials,
+                   get_spotify_access_token, get_track, get_track_features)
 
 
 def get_albums_data_from_api(albums_ids):
