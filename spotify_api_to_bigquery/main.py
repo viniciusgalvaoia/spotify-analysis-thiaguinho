@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timedelta
 
 import pandas as pd
 from rich.logging import RichHandler
@@ -195,6 +196,8 @@ def get_track_features_data_from_api(albums_data):
 
 
 if __name__ == "__main__":
+    date_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    logger.info("JOB START")
     project_id = "spotiflow-411208"
     credentials = get_google_credentials()
     access_token = get_spotify_access_token()
@@ -214,36 +217,49 @@ if __name__ == "__main__":
         "6zSN9UDV1jwdihKLvbRuKR",
         "4upLAEC3VhsPKkBUJI6KkS",
     ]
+    logger.info(f"Requesting albums data from spotify api at: {date_str}")
     albums_data = get_albums_data_from_api(thiaguinho_albums_ids)
     albums_df = pd.DataFrame(albums_data)
     albums_df.drop("tracks", axis=1, inplace=True)
+    logger.info(f"Ingesting {albums_df.shape[0]} albums in raw_spotify.albums bigquery table")
     albums_df.to_gbq(
         destination_table="raw_spotify.albums",
         project_id=project_id,
         if_exists="append",
         credentials=credentials,
     )
+    logger.info(f"Albums table ingestion finished!")
+    logger.info(f"Requesting artists data from spotify api at: {date_str}")
     artists_data = get_artists_data_from_api(albums_data)
     artist_df = pd.DataFrame(artists_data)
+    logger.info(f"Ingesting {artist_df.shape[0]} artists in raw_spotify.artists bigquery table")
     artist_df.to_gbq(
         destination_table="raw_spotify.artists",
         project_id=project_id,
         if_exists="append",
         credentials=credentials,
     )
+    logger.info(f"Artists table ingestion finished!")
+    logger.info(f"Requesting tracks data from spotify api at: {date_str}")
     tracks_data = get_tracks_data_from_api(albums_data)
     tracks_df = pd.DataFrame(tracks_data)
+    logger.info(f"Ingesting {tracks_df.shape[0]} tracks in raw_spotify.tracks bigquery table")
     tracks_df.to_gbq(
         destination_table="raw_spotify.tracks",
         project_id=project_id,
         if_exists="append",
         credentials=credentials,
     )
+    logger.info(f"Tracks table ingestion finished!")
+    logger.info(f"Requesting track features data from spotify api at: {date_str}")
     tracks_features_data = get_track_features_data_from_api(albums_data)
     tracks_features_df = pd.DataFrame(tracks_features_data)
+    logger.info(f"Ingesting {tracks_df.shape[0]} tracks_features in raw_spotify.tracks_features bigquery table")
     tracks_features_df.to_gbq(
         destination_table="raw_spotify.tracks_features",
         project_id=project_id,
         if_exists="append",
         credentials=credentials,
     )
+    logger.info("Tracks Features table ingestion finished!")
+    logger.info("END OF JOB")
