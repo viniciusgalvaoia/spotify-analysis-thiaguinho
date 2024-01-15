@@ -1,6 +1,20 @@
+import logging
+
 import pandas as pd
+from rich.logging import RichHandler
+from rich.traceback import install
 from utils import (get_album, get_artist, get_google_credentials,
                    get_spotify_access_token, get_track, get_track_features)
+
+FORMAT = "[%(levelname)s] [%(message)s]"
+logging.basicConfig(
+    level=logging.INFO,
+    format=FORMAT,
+    datefmt="[%Y-%m-%d %H:%M:%S]",
+    handlers=[RichHandler(show_level=False, show_path=False)],
+)
+install()
+logger = logging.getLogger("main")
 
 
 def get_albums_data_from_api(albums_ids):

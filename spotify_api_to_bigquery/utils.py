@@ -1,10 +1,8 @@
+import os
 from base64 import b64encode
 
 import requests
 from google.oauth2 import service_account
-
-CLIENT_ID = ""
-CLIENT_SECRET = ""
 
 
 def get_google_credentials(credentials_path="./google_credentials/key.json"):
@@ -38,7 +36,9 @@ def get_spotify_access_token():
     Example:
         >>> access_token = get_spotify_access_token()
     """
-    auth_header = b64encode(f"{CLIENT_ID}:{CLIENT_SECRET}".encode()).decode("utf-8")
+    client_id = os.environ.get("CLIENT_ID")
+    client_secret = os.environ.get("CLIENT_SECRET")
+    auth_header = b64encode(f"{client_id}:{client_secret}".encode()).decode("utf-8")
 
     auth_options = {
         "url": "https://accounts.spotify.com/api/token",
