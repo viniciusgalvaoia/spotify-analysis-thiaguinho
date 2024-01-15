@@ -18,7 +18,7 @@ This project focuses on the comprehensive analysis of music data sourced from th
 
 ![dbt](images/dbt-spotify.PNG)
 
-- **[Dashboard](https://app.powerbi.com/view?r=eyJrIjoiYzAzMjE0ZGUtZGM3Yy00NjI4LThiOWYtMDBjNWJkNmJjYjI2IiwidCI6ImYwMjAyMmRkLWI3YmYtNGU3OC04MjFjLWFmN2VlMjk2ZTgyNiJ9)**: Looker is employed to create a visually insightful dashboard. The dashboard aggregates key metrics, providing an overview of Thiaguinho's musical portfolio.
+- **[Dashboard](https://lookerstudio.google.com/reporting/2b216e5d-85a1-4a0a-bd98-d2d5c3f24141)**: Looker is employed to create a visually insightful dashboard. The dashboard aggregates key metrics, providing an overview of Thiaguinho's musical portfolio.
 
 ![Dashboard](images/looker-dashboard-spotify.PNG)
 
