@@ -5,6 +5,31 @@ from utils import get_google_credentials, get_spotify_access_token, get_album, g
 
 
 def get_albums_data_from_api(albums_ids):
+    """
+    Retrieves album data from the Spotify API for a list of album IDs.
+
+    Args:
+        albums_ids (list): A list of album IDs to fetch data for.
+
+    Returns:
+        list: A list of dictionaries containing album data. Each dictionary
+              includes the following keys:
+                - "album_id": The ID of the album.
+                - "artist_id": The ID of the artist of the album.
+                - "album_name": The name of the album.
+                - "popularity": The popularity score of the album.
+                - "release_date": The release date of the album.
+                - "total_tracks": The total number of tracks in the album.
+                - "tracks": A list of track IDs in the album.
+
+    Note:
+        This function requires a valid access token for authentication.
+
+    Example:
+        >>> access_token = "your_access_token"
+        >>> album_ids_to_fetch = ["album_id_1", "album_id_2"]
+        >>> albums_data = get_albums_data_from_api(album_ids_to_fetch)
+    """
     albumns_data_list = []
     for album_id in albums_ids:
         album_response = get_album(access_token, album_id)
@@ -24,6 +49,31 @@ def get_albums_data_from_api(albums_ids):
 
 
 def get_artists_data_from_api(albums_data):
+    """
+    Retrieves artist data from the Spotify API based on album data.
+
+    Args:
+        albums_data (list): A list of dictionaries containing album data.
+                            Each dictionary should include the "artist_id" key.
+
+    Returns:
+        list: A list of dictionaries containing artist data. Each dictionary
+              includes the following keys:
+                - "artist_id": The ID of the artist.
+                - "artist_name": The name of the artist.
+                - "followers": The total number of followers for the artist.
+                - "genres": The primary genre of the artist.
+                - "popularity": The popularity score of the artist.
+                - "image": URL of the artist's image.
+                - "href": The Spotify API URL for the artist.
+
+    Note:
+        This function requires a valid access token for authentication.
+
+    Example:
+        >>> access_token = "your_access_token"
+        >>> artists_data = get_artists_data_from_api(albums_data)
+    """
     artists_data_list = []
     artist_ids = [album_data["artist_id"] for album_data in albums_data]
     unique_artist_ids = set(artist_ids)
@@ -43,6 +93,31 @@ def get_artists_data_from_api(albums_data):
 
 
 def get_tracks_data_from_api(albums_data):
+    """
+    Retrieves track data from the Spotify API based on album data.
+
+    Args:
+        albums_data (list): A list of dictionaries containing album data.
+                            Each dictionary should include the "tracks" key.
+
+    Returns:
+        list: A list of dictionaries containing track data. Each dictionary
+              includes the following keys:
+                - "track_id": The ID of the track.
+                - "album_id": The ID of the album to which the track belongs.
+                - "artist_id": The ID of the artist of the track.
+                - "track_name": The name of the track.
+                - "popularity": The popularity score of the track.
+                - "href": The Spotify API URL for the track.
+                - "duration_ms": The duration of the track in milliseconds.
+
+    Note:
+        This function requires a valid access token for authentication.
+
+    Example:
+        >>> access_token = "your_access_token"
+        >>> track_data = get_tracks_data_from_api(albums_data)
+    """
     track_data_list = []
     for album_data in albums_data:
         for track_id in album_data["tracks"]:
@@ -61,6 +136,27 @@ def get_tracks_data_from_api(albums_data):
 
 
 def get_track_features_data_from_api(albums_data):
+    """
+    Retrieves track features data from the Spotify API based on album data.
+
+    Args:
+        albums_data (list): A list of dictionaries containing album data.
+                            Each dictionary should include the "tracks" key.
+
+    Returns:
+        list: A list of dictionaries containing track features data. Each dictionary
+              includes the following keys:
+                - "track_id": The ID of the track.
+                - "acousticness", "danceability", ..., "valence": Audio features
+                  of the track.
+
+    Note:
+        This function requires a valid access token for authentication.
+
+    Example:
+        >>> access_token = "your_access_token"
+        >>> track_features_data = get_track_features_data_from_api(albums_data)
+    """
     track_features_data_list = []
     for album_data in albums_data:
         for track_id in album_data["tracks"]:
